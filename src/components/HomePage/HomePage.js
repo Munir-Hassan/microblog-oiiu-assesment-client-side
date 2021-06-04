@@ -21,37 +21,43 @@ const HomePage = () => {
 					.catch((error) => {
 						console.log(error);
 					});
-
-				setUser(JSON.parse(localStorage.getItem('profile-oiiu')));
 			};
+			setUser(JSON.parse(localStorage.getItem('profile-oiiu')));
 
 			getPostData();
 		},
 		[ location ]
 	);
-	return !postData.length ? (
-		<CircularProgress />
-	) : (
+	return (
 		<Grow in>
 			<Container>
 				<Grid container justify='space-between' alignItems='stretch' spacing={3}>
-					<Grid item xs={12} sm={8}>
-						{postData &&
-							postData
-								.slice(0)
-								.reverse()
-								.map((post, index) => (
-									<Posts
-										key={index}
-										id={post._id}
-										title={post.title}
-										postContent={post.postContent}
-										date={post.createdAt}
-										likes={post.likes}
-										userId={user && user._id}
-									/>
-								))}
-					</Grid>
+					{!postData.length ? (
+						<Grid item xs={12} sm={8}>
+							<CircularProgress />
+						</Grid>
+					) : (
+						<Grow in>
+							<Grid item xs={12} sm={8}>
+								{postData &&
+									postData
+										.slice(0)
+										.reverse()
+										.map((post, index) => (
+											<Posts
+												key={index}
+												id={post._id}
+												username={post.username}
+												title={post.title}
+												postContent={post.postContent}
+												date={post.createdAt}
+												likePost={post.likes}
+												userId={user && user._id}
+											/>
+										))}
+							</Grid>
+						</Grow>
+					)}
 					<Grid item xs={12} sm={4}>
 						{user && (
 							<Button

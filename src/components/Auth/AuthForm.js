@@ -36,7 +36,7 @@ const AuthForm = () => {
 		console.log(authForm);
 		try {
 			await axios
-				.post('http://localhost:5000/user/auth', authForm)
+				.post(`http://localhost:5000/user/auth/${isSignUp ? 'signup' : 'signin'}`, authForm)
 				.then((res) => {
 					console.log(res);
 					localStorage.setItem('profile-oiiu', JSON.stringify(res.data.result));

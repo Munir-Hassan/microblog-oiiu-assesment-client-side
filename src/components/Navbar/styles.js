@@ -13,7 +13,8 @@ export default makeStyles((theme) => ({
 	},
 	heading: {
 		color: 'rgba(0,183,255, 1)',
-		textDecoration: 'none'
+		textDecoration: 'none',
+		fontSize: '3rem'
 	},
 	brandContainer: {
 		display: 'flex',

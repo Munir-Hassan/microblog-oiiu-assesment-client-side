@@ -6,32 +6,38 @@ import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import useStyles from './styles';
 
-const Posts = ({ title, postContent, date, likes, id, userId }) => {
+const Posts = ({ username, title, postContent, date, likePost, id, userId }) => {
 	const classes = useStyles();
-	const [ isLiked, setIsLiked ] = useState(false);
-	const handlePostLikes = async () => {
-		const likeRequest = { id, userId };
-		try {
-			await axios
-				.post('http://localhost:5000/posts', likeRequest)
-				.then((res) => {
-					console.log(res);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		} catch (error) {
-			console.log(error);
-		}
+	const [ isLiked, setIsLiked ] = useState(likePost.includes(userId));
+	const [ postLikes, setPostLikes ] = useState(likePost.length);
 
-		setIsLiked(!isLiked);
+	const handlePostLikes = async () => {
+		if (userId) {
+			const userLikeRequest = { userId };
+			try {
+				await axios
+					.patch(`http://localhost:5000/posts/${id}/likePost`, userLikeRequest)
+					.then((res) => {
+						console.log(res.data.likes);
+						setPostLikes(res.data.likes.length);
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			} catch (error) {
+				console.log(error);
+			}
+			setIsLiked(!isLiked);
+		} else {
+			alert('Please Sign in to like a post');
+		}
 	};
 	return (
 		<Card className={classes.posts} raised>
 			<CardHeader
 				avatar={
 					<Avatar aria-label='recipe' className={classes.avatar}>
-						R
+						{username && username.charAt()}
 					</Avatar>
 				}
 				action={
@@ -39,8 +45,8 @@ const Posts = ({ title, postContent, date, likes, id, userId }) => {
 						<MoreVertIcon />
 					</IconButton>
 				}
-				title={id}
-				subheader={date.toString()}
+				title={username}
+				subheader={date}
 			/>
 			<CardContent>
 				<Typography variant='h4'>{title}</Typography>
@@ -52,7 +58,7 @@ const Posts = ({ title, postContent, date, likes, id, userId }) => {
 				<IconButton aria-label='Like' color='primary' onClick={handlePostLikes}>
 					{isLiked ? <ThumbUpAltIcon /> : <ThumbUpAltOutlinedIcon />}
 				</IconButton>
-				<Typography variant='body1'>{likes.length}</Typography>
+				<Typography variant='body1'>{postLikes}</Typography>
 			</CardActions>
 		</Card>
 	);

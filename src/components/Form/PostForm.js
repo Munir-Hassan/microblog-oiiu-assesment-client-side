@@ -9,6 +9,10 @@ const Form = () => {
 	const history = useHistory();
 	const classes = useStyles();
 	const [ postForm, setPostForm ] = useState(initialPostFormState);
+	const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('profile-oiiu')));
+	console.log(user);
+	const username = { name: `${user && user.name.firstname} ${user && user.name.lastname}` };
+	console.log(username);
 
 	const handleInputChange = (e) => {
 		setPostForm({ ...postForm, [e.target.name]: e.target.value });
@@ -16,6 +20,9 @@ const Form = () => {
 
 	const handlePostFormSubmit = async (event) => {
 		event.preventDefault();
+		console.log(postForm);
+
+		setPostForm({ ...postForm, username: username.name });
 		console.log(postForm);
 		await createPost(postForm);
 		resetPostForm();

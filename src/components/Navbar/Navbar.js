@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { AppBar, Typography, Avatar, Button } from '@material-ui/core';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import useStyles from './styles';
 
 const Navbar = () => {
 	const location = useLocation();
+	const history = useHistory();
 	const classes = useStyles();
 	const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('profile-oiiu')));
 	useEffect(
@@ -15,9 +16,9 @@ const Navbar = () => {
 	);
 
 	const handleLogOut = () => {
-		console.log(user);
 		localStorage.clear();
 		setUser(null);
+		history.push('/');
 	};
 
 	return (
@@ -32,11 +33,11 @@ const Navbar = () => {
 				<div className={classes.profileContainer}>
 					{user ? (
 						<React.Fragment>
-							<Avatar src='' alt='Munir Hassan'>
-								M
+							<Avatar src='' alt={user && user.name.firstname}>
+								{user && user.name.firstname.charAt(0)}
 							</Avatar>
 							<Typography varient='body2' align='center'>
-								{user && user.name.firstName}
+								{user && user.name.firstname}
 							</Typography>
 							<Button
 								type='button'
